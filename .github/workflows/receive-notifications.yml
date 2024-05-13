@@ -14,7 +14,7 @@ jobs:
         with:
           repository: organization/link-source-between-repositories
           path: link-source-between-repositories
-          token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+          token: ${{ secrets.ACCESS_TOKEN }}
       - name: copy .gitignore
         run: cp link-source-between-repositories/.gitignore .gitignore
       - name: clean link-source-between-repositories
@@ -22,7 +22,7 @@ jobs:
       - name: create PR
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+          token: ${{ secrets.ACCESS_TOKEN }}
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           commit-message: 'copy .gitignore'
           branch: copy_target
