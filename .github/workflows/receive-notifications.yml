@@ -1,0 +1,31 @@
+name: copy .gitignore from link-source-between-repositories
+on:
+  repository_dispatch:
+    types: [target-updated]
+jobs:
+  copy-target:
+    name: copy .gitignore
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: clone link-source-between-repositories
+        uses: actions/checkout@v4
+        with:
+          repository: organization/link-source-between-repositories
+          path: link-source-between-repositories
+          token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+      - name: copy .gitignore
+        run: cp link-source-between-repositories/.gitignore .gitignore
+      - name: clean link-source-between-repositories
+        run: rm -rf link-source-between-repositories
+      - name: create PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          commit-message: 'copy .gitignore'
+          branch: copy_target
+          branch-suffix: timestamp
+          delete-branch: true
+          title: 'updated .gitignore'
